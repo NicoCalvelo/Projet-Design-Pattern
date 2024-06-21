@@ -1,0 +1,26 @@
+{
+    "name": "nicocalvelo/projet-design-pattern",
+    "description": "Projet final de Design Pattern",
+    "autoload": {
+        "psr-4": {
+            "Nicocalvelo\\ProjetDesignPattern\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Nico Calvelo",
+            "email": "dia.calvelo.nicolas@gmail.com"
+        },
+        {
+            "name": "Mathieu Kecka",
+            "email": "mathieu.keca@gmail.com"
+        },
+        {
+            "name": "Rémy Saguez",
+            "email": "resaguez.2800@gmal.com"
+        }
+    ],
+    "require": {
+        "stripe/stripe-php": "^14.10"
+    }
+}
