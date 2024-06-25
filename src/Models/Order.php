@@ -10,7 +10,8 @@ class Order implements OrderInterface
     protected array $products = [];
 
     public function __construct(
-        protected string $orderNumber
+        public string $orderNumber,
+        public bool $payed = false
     ) {
     }
 
@@ -23,7 +24,7 @@ class Order implements OrderInterface
     {
         $total = 0;
         foreach ($this->products as $product) {
-            $total += $product->price;
+            $total += $product->getPrice();
         }
         return $total;
     }
