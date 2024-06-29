@@ -7,5 +7,5 @@ interface ProductComponentInterface
 {
     public function display($depth = 0): void;
 
-    public function searchByName(string $name): ProductComponentInterface;
+    public function searchByName(string $name): ?ProductComponentInterface;
 }

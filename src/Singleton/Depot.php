@@ -5,6 +5,8 @@ namespace App\Singleton;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Interfaces\ProductComponentInterface;
+use App\Interfaces\ProductInterface;
+use Stripe\Collection;
 
 abstract class Depot
 {
@@ -17,32 +19,32 @@ abstract class Depot
 
             // Vêtements
             $clotheCategory = new ProductCategory('Vêtements');
-            $clotheCategory->addProduct(new Product('T-shirt', 10.99, 'Un t-shirt simple et élégant'));
-            $clotheCategory->addProduct(new Product('Pantalon', 29.99, 'Un pantalon confortable et pratique'));
-            $clotheCategory->addProduct(new Product('Chaussures', 49.99, 'Des chaussures de sport'));
+            $clotheCategory->addProduct(new Product('T-shirt', 'Un t-shirt simple et élégant',  10.99));
+            $clotheCategory->addProduct(new Product('Pantalon', 'Un pantalon confortable et pratique', 29.99));
+            $clotheCategory->addProduct(new Product('Chaussures', 'Des chaussures de sport', 49.99));
 
             // Boissons
             $drinksCategory = new ProductCategory('Boissons');
             $alcholCategory = new ProductCategory('Alcool');
-            $alcholCategory->addProduct(new Product('Vin', 12.99, 'Un bon vin rouge'));
-            $alcholCategory->addProduct(new Product('Whisky', 49.99, 'Un whisky écossais'));
+            $alcholCategory->addProduct(new Product('Vin', 'Un bon vin rouge', 12.99));
+            $alcholCategory->addProduct(new Product('Whisky', 'Un whisky écossais', 49.99));
             $notAlcholCategory = new ProductCategory('Sans alcool');
-            $notAlcholCategory->addProduct(new Product('Eau', 1.99, 'Une bouteille d\'eau minérale'));
-            $notAlcholCategory->addProduct(new Product('Soda', 2.99, 'Une canette de soda'));
+            $notAlcholCategory->addProduct(new Product('Eau', 'Une bouteille d\'eau minérale', 1.99));
+            $notAlcholCategory->addProduct(new Product('Soda', 'Une canette de soda', 2.99));
             $drinksCategory->addProduct($alcholCategory);
             $drinksCategory->addProduct($notAlcholCategory);
 
             // Nourriture
             $foodCategory = new ProductCategory('Nourriture');
             $breakfastCategory = new ProductCategory('Petit-déjeuner');
-            $breakfastCategory->addProduct(new Product('Céréales', 3.99, 'Un paquet de céréales'));
-            $breakfastCategory->addProduct(new Product('Pain', 1.99, 'Une baguette de pain'));
+            $breakfastCategory->addProduct(new Product('Céréales', 'Un paquet de céréales', 3.99));
+            $breakfastCategory->addProduct(new Product('Pain', 'Une baguette de pain', 1.99));
             $lunchCategory = new ProductCategory('Déjeuner');
-            $lunchCategory->addProduct(new Product('Salade', 4.99, 'Une salade composée'));
-            $lunchCategory->addProduct(new Product('Sandwich', 3.99, 'Un sandwich au jambon'));
+            $lunchCategory->addProduct(new Product('Salade', 'Une salade composée', 4.99));
+            $lunchCategory->addProduct(new Product('Sandwich', 'Un sandwich au jambon', 3.99));
             $dinneCategory = new ProductCategory('Dîner');
-            $dinneCategory->addProduct(new Product('Pâtes', 5.99, 'Un plat de pâtes'));
-            $dinneCategory->addProduct(new Product('Steak', 9.99, 'Un steak grillé'));
+            $dinneCategory->addProduct(new Product('Pâtes', 'Un plat de pâtes', 5.99));
+            $dinneCategory->addProduct(new Product('Steak', 'Un steak grillé', 9.99));
             $foodCategory->addProduct($breakfastCategory);
             $foodCategory->addProduct($lunchCategory);
             $foodCategory->addProduct($dinneCategory);
@@ -55,5 +57,15 @@ abstract class Depot
         }
 
         return self::$products;
+    }
+
+
+    public static function searchProduct(string $name, ProductCategory $category = null): ?ProductInterface
+    {
+        if ($category == null) {
+            $category = self::$products;
+        }
+        
+        return $category->searchByName($name);
     }
 }

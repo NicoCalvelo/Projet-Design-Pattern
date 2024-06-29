@@ -9,7 +9,7 @@ class ProductCategory implements ProductComponentInterface
     /**
      * @var ProductComponentInterface[]
      */
-    protected array $products = [];
+    public array $products = [];
 
     public function __construct(protected string $title)
     {
@@ -33,14 +33,15 @@ class ProductCategory implements ProductComponentInterface
         }
     }
 
-    public function searchByName(string $name): ProductComponentInterface
+    // Algorithme simple de recherche de produit par nom, retourne le premier produit trouvé
+    public function searchByName(string $name): ?ProductComponentInterface
     {
         foreach ($this->products as $product) {
             $product = $product->searchByName($name);
             if ($product instanceof ProductComponentInterface) {
                 return $product;
             }
-            return false;
         }
+        return null;
     }
 }

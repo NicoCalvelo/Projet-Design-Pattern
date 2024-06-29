@@ -42,10 +42,12 @@ class Product implements ProductInterface
         echo $offset . "- " . $this->getDetails() . PHP_EOL;
     }
 
-    public function searchByName(string $name): ProductComponentInterface
+    public function searchByName(string $name): ?ProductComponentInterface
     {
         if(strtolower($this->name) === strtolower($name)){
             return $this;
+        } else {
+            return null;
         }
     }
 }

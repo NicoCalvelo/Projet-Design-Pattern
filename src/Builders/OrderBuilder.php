@@ -23,6 +23,11 @@ class OrderBuilder
         return $this;
     }
 
+    public function getProducts() : array
+    {
+        return $this->products;
+    }
+
     public function removeProduct(ProductInterface $product): self
     {
         $this->products = array_filter($this->products, fn ($p) => $p !== $product);
