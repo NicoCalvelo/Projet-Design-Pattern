@@ -2,14 +2,16 @@
 
 namespace App\Facade;
 
+use App\Adapter\StripePayment;
 use App\Builders\OrderBuilder;
 use App\Interfaces\ProductComponentInterface;
+use App\Models\Payment;
 use App\Singleton\Depot;
 
 abstract class Merchant
 {
     protected static $orderBuilder;
-    protected static ?OrderBuilder $products;
+    protected static ?ProductComponentInterface $products;
 
     public static function listProducts(): void
     {
@@ -62,20 +64,82 @@ abstract class Merchant
             echo PHP_EOL;
             echo PHP_EOL;
         } else {
+            echo "Votre pannier vous coûtera : " . self::$orderBuilder->build()->getTotalAmount() . " €\n";
+            echo PHP_EOL;
             foreach (self::$orderBuilder->getProducts() as $product) {
                 $product->display();
             }
 
             echo PHP_EOL;
-            echo "Votre pannier vous coûtera : " . self::$orderBuilder->getTotalPrice() . " €\n";
             echo "0. Vider mon pannier\n";
             echo "1. Continuer mes achats\n";
             $choice = trim(fgets(STDIN));
 
+            // clear the console
+            echo "\033[2J\033[;H";
             if ($choice == "0") {
                 self::$orderBuilder = new OrderBuilder();
                 echo "Votre pannier à été vidé\n";
                 echo PHP_EOL;
+            }
+        }
+    }
+
+    public static function checkout(): void
+    {
+        if (self::$orderBuilder === null) {
+            echo "Votre pannier est vide !";
+            echo PHP_EOL;
+            echo PHP_EOL;
+        } else {
+            $order = self::$orderBuilder->build();
+            echo "Votre pannier vous coûtera : " . $order->getTotalAmount() . " €\n";
+            echo PHP_EOL;
+            foreach ($order->getProducts() as $product) {
+                $product->display();
+            }
+
+            echo PHP_EOL;
+            echo "Choisissez un mode de paiement : -- -- -- -- -- -- \n";
+            echo "  0. Annuler\n";
+            echo "  1. En espèces\n";
+            echo "  2. Stripe\n";
+            echo "  3. PayPal\n";
+            echo "Votre choix :";
+            $choice = trim(fgets(STDIN));
+
+            while ($choice != "0" && $choice != "1" && $choice != "2" && $choice != "3") {
+                echo "Choix invalide\n";
+                $choice = trim(fgets(STDIN));
+            }
+
+            // clear the console
+            echo "\033[2J\033[;H";
+
+            switch ($choice) {
+                case "0":
+                    echo "Achat annulé\n";
+                    break;
+                case "1":
+                    $payment = new Payment("Cash Payment", "payement par espèces", $order);
+                    break;
+                case "2":
+                    $payment = new Payment("Stripe Payment", "payement en ligne avec Stripe", $order);
+                    $stripePayment = new StripePayment($payment);
+
+                    echo "Veulliez regler à partir du lien suivante";
+                    echo "  " . $stripePayment->getPaymentLink();
+                    break;
+                case "3":
+                    $payment = new Payment("PayPal Payment", "payement en ligne avec PayPal", $order);
+                    // TODO créer payment adapter de payement pour PayPal
+
+                    break;
+            }
+
+            if (isset($payment)) {
+                echo $payment->pay();
+                echo "Merci pour votre achat !\n";
             }
         }
     }

@@ -39,7 +39,7 @@ class StripePayment implements OnlinePaymentInterface
             'line_items' => $prices,
             'after_completion' => [
                 'type' => 'redirect',
-                'redirect' => ['url' => $_SERVER['HTTP_REFERER'] . '/StripeRedirect.php'],
+                'redirect' => ['url' => 'https://localhost:3000/Stripe-success'],
             ],
         ]);
     }

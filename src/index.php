@@ -14,6 +14,7 @@ function userInteract()
     while ($choice === null) {
         echo "1. Afficher tous les produits\n";
         echo "2. Consulter mon pannier\n";
+        echo "3. Régler mon pannier\n";
 
         echo "- - - - - - -\n";
         echo "0. Quitter\n";
@@ -31,6 +32,9 @@ function userInteract()
             case '2':
                 Merchant::displayCart();
                 userInteract();
+                break;
+            case '3':
+                Merchant::checkout();
                 break;
             case '0':
                 echo "Au revoir !\n";
