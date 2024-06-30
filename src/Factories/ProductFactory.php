@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Interfaces\ProductInterface;
 use App\Interfaces\ProductFactoryInterface;
 
+// Design Pattern Factory
 class ProductFactory implements ProductFactoryInterface
 {
     public function createProduct(string $name, string $description, float $price): ProductInterface

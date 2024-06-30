@@ -2,7 +2,8 @@
 
 namespace App\Interfaces;
 
-// Fot the composite design pattern
+// Class de base pour les produits et les categories
+// Permets d'implementer le Design Pattern Composite
 interface ProductComponentInterface
 {
     public function display($depth = 0): void;

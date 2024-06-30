@@ -4,10 +4,12 @@ namespace App\Facade;
 
 use App\Adapter\StripePayment;
 use App\Builders\OrderBuilder;
+use App\Decorators\OrderDiscount;
 use App\Interfaces\ProductComponentInterface;
 use App\Models\Payment;
 use App\Singleton\Depot;
 
+// Facade en forme de singleton pour gérer les achats
 abstract class Merchant
 {
     protected static $orderBuilder;
@@ -85,6 +87,7 @@ abstract class Merchant
         }
     }
 
+    // function pour regler le pannier
     public static function checkout(): void
     {
         if (self::$orderBuilder === null) {
@@ -97,6 +100,18 @@ abstract class Merchant
             echo PHP_EOL;
             foreach ($order->getProducts() as $product) {
                 $product->display();
+            }
+
+            // On demade si l'utilisateur a un code promo
+            echo "Avez-vous un code promo ? (oui/non) : ";
+            $choice = trim(fgets(STDIN));
+
+            if ($choice === 'oui' || $choice === 'o' || $choice === 'Oui' || $choice === 'O') {
+                $order = new OrderDiscount($order);
+                // clear the console
+                echo "\033[2J\033[;H";
+                echo $order->getDetails();
+                echo PHP_EOL;
             }
 
             echo PHP_EOL;

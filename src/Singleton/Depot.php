@@ -6,8 +6,8 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Interfaces\ProductComponentInterface;
 use App\Interfaces\ProductInterface;
-use Stripe\Collection;
 
+// Singleton pour gérer les produits
 abstract class Depot
 {
     protected static $products;

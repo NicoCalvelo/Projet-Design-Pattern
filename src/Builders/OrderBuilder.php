@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Interfaces\OrderInterface;
 use App\Interfaces\ProductInterface;
 
+// Class builder pour construire pas à pas une commande
 class OrderBuilder
 {
     protected string $orderNumber;

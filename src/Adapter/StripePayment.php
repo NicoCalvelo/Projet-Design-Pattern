@@ -8,6 +8,7 @@ use Stripe\StripeClient;
 use App\Interfaces\ProductInterface;
 use App\Interfaces\OnlinePaymentInterface;
 
+// Class adapter pour le paiement en ligne avec Stripe
 class StripePayment implements OnlinePaymentInterface
 {
     protected PaymentLink $paymentLink;
